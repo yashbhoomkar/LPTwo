@@ -1,0 +1,6 @@
+services:
+  cpp:
+    image: cpp
+    build:
+      context: .
+      dockerfile: ./Dockerfile
