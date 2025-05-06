@@ -3,7 +3,7 @@ using namespace std;
 
 #define P pair<int,int>
 
-
+// Selection Sort
 class SelectionSort
 {
     public:
@@ -44,7 +44,7 @@ class SelectionSort
         }
 };
 
-
+// MST using Prims Algorithm
 class PrimsAlgorithmMST
 {
     public:
@@ -186,6 +186,93 @@ class Dijkstra
         }
 };
 
+// Job Scheduling
+class Job
+{
+    public:
+        int id;
+        int deadline;
+        int profit;
+
+        Job()
+        {
+            id = 0;
+            deadline = 0;
+            profit = 0;
+        }
+
+        Job(int id , int deadline , int profit)
+        {
+            this->id = id;
+            this->deadline = deadline;
+            this->profit = profit;
+        }
+};
+
+struct comp
+{
+    bool operator()(const Job &a , const Job &b)
+    {
+        return a.profit < b.profit;
+    }
+};
+
+class JobScheduling
+{
+    public:
+
+        vector<int> schedule(vector<Job> &jobs)
+        {
+            priority_queue<Job , vector<Job> , comp> pq;
+            for(auto it : jobs)
+            {
+                pq.push(it);
+            }
+
+            int size = jobs.size();
+            vector<int> slots(size , -1);
+
+            while(!pq.empty())
+            {
+                Job job = pq.top();
+                pq.pop();
+                for(int i = job.deadline - 1 ; i >= 0 ; i--)
+                {
+                    if(slots[i] == -1)
+                    {
+                        slots[i] = job.id;
+                        break;
+                    }
+                }
+            }
+
+            return slots;
+        }
+
+        void printVector(vector<int> &v)
+        {
+            for(auto it : v)
+            {
+                cout << it << " ";
+            }
+            cout << endl;
+        }
+
+        int main()
+        {
+            vector<Job> jobs = {
+                Job(1, 4, 20),
+                Job(2, 1, 10),
+                Job(3, 3, 40),
+                Job(4, 1, 30),
+            };
+            vector<int> slots = schedule(jobs);
+            printVector(slots);
+            return 0;
+        }
+};
+
+
 void selectionSort()
 {
     SelectionSort obj;
@@ -204,10 +291,17 @@ void SingleSourceShortestPathDijkstra()
     obj.main();
 }
 
+void JobSchedulingProblem()
+{
+    JobScheduling obj;
+    obj.main();
+}
+
 int main()
 {
     //selectionSort();
     //primsAlgorithmMST();
-    SingleSourceShortestPathDijkstra();
+    //SingleSourceShortestPathDijkstra();
+    JobSchedulingProblem();
     return 0;
 }
