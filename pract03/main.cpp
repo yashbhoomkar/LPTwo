@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define P pair<int,int>
+
+
 class SelectionSort
 {
     public:
@@ -111,6 +114,78 @@ class PrimsAlgorithmMST
         }
 };
 
+// Single Source Shortest Path -> Dijkstra
+class Dijkstra
+{
+    public:
+        int V;
+        vector<vector<pair<int,int>>> adj;
+        
+        vector<int> dijkstra(int source)
+        {
+            vector<int> dist(V , INT_MAX);
+            priority_queue<pair<int,int> , vector<pair<int,int>> , greater<pair<int,int>>> pq;
+            
+            pq.push({0,source});
+            dist[source] = 0;
+
+            while(!pq.empty())
+            {
+                auto curr = pq.top();
+                pq.pop();
+
+                int currdist = curr.first;
+                int node = curr.second;
+
+                for(auto it : adj[node])
+                {
+                    int adjNode = it.first;
+                    int edgWt = it.second;
+
+                    if(currdist + edgWt < dist[adjNode])
+                    {
+                        dist[adjNode] = currdist + edgWt;
+                        pq.push({dist[adjNode] , adjNode});
+                    }
+
+                }
+            }
+
+
+            return dist;
+        }
+
+        void printVector(vector<int> &v)
+        {
+            for(auto it : v)
+            {
+                cout << it << " ";
+            }
+            cout << endl;
+        }
+
+        int main()
+        {
+            // adj -> {vertex, weight}
+            this->V = 5;
+            adj.resize(V);
+
+            // Constructing the graph
+            adj[0].push_back({1, 2});
+            adj[0].push_back({2, 4});
+            adj[1].push_back({2, 1});
+            adj[1].push_back({3, 7});
+            adj[2].push_back({3, 3});
+            adj[3].push_back({4, 1});
+            int source = 0;
+
+            vector<int> dist = dijkstra(source);
+
+            printVector(dist);
+            return 0;
+        }
+};
+
 void selectionSort()
 {
     SelectionSort obj;
@@ -123,9 +198,16 @@ void primsAlgorithmMST()
     obj.main();
 }
 
+void SingleSourceShortestPathDijkstra()
+{
+    Dijkstra obj;
+    obj.main();
+}
+
 int main()
 {
     //selectionSort();
-    primsAlgorithmMST();
+    //primsAlgorithmMST();
+    SingleSourceShortestPathDijkstra();
     return 0;
 }
